@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>游戏注册</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .register-container {
+            background-color: #4a69bd; /* 你可以选择任何你喜欢的颜色 */
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-form {
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* So that width includes padding */
+        }
+
+        input[type="submit"] {
+            background-color: #82ccdd;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #60a3bc;
+        }
+    </style>
+
+    <script src="js/jquery-3.7.1.js" type="text/javascript"></script>
+    <script>var count = 0</script>
+    <script>
+        $(document).ready(function() {
+            $("#register").submit(function(event) {
+                event.preventDefault();
+
+                const nickname = $("#nickname").val();
+                const username = $("#username").val();
+                const password = $("#password").val();
+                const password1 = $("#password1").val();
+                const name = $("#name").val();
+                const sex = $("#sex").val();
+                const age = $("#age").val();
+                const phone = $("#phone").val();
+                const idcard = $("#idcard").val();
+
+                // 用户名只能包含字母、数字、下划线和连字符，长度在3到16个字符之间
+
+                const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/;
+
+                // 密码至少包含一个大写字母、一个小写字母、一个数字，长度在8到20个字符之间
+                const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+
+                const agePattern = /^(?=.*\d).{1,2}$/
+
+                const numberPattern = /^(?=.*\d).{11}$/
+
+                const idcardPattern = /^(?=.*\d).{18}$/
+
+                ////////  密码输入次数限制
+                if (password != password1) {
+                    alert("两次输入的密码不一致，请重新输入！！！");
+                    ++count;
+                    if (count > 2) {
+                        ////// 直接移除事件，不给提交
+                        $('#btn').off();
+                        alert("你输入密码的次数已超过次数限制，请重新访问！！！");
+                    }
+                    return;
+                }
+
+                ///////// 正则表达式校验
+                if (!username.match(usernamePattern)) {
+                    alert("用户名格式不正确，用户名只能包含字母、数字、下划线和连字符，长度在3到16个字符之间");
+                    return;
+                }
+
+                if (!password.match(passwordPattern)) {
+                    alert("密码格式不正确，密码至少包含一个大写字母、一个小写字母、一个数字，长度在8到20个字符之间");
+                    return;
+                }
+
+                if (!age.match(agePattern)) {
+                    alert("年龄格式不正确，年龄只包含数字，且长度在1到2个字符之间");
+                    return;
+                }
+
+                if (!phone.match(numberPattern)) {
+                    alert("电话格式不正确，电话应该只包含数字，且长度固定为11个");
+                    return;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/CardGame/LoginRegister?method=register",
+                    data: { "nickname":nickname, "username": username, "password": password ,"name":name,"sex":sex,
+                       "age":age,"phone":phone,"idcard":idcard
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.href = "login.html"; // 注册成功，跳转到登录页面
+                        } else {
+                            alert("注册失败，请重新填写信息！！！");
+                        }
+                    },
+                    error: function() {
+                        alert("发生错误，请重试！");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="register-container">
+    <div class="register-form">
+    <form id="register">
+        <h1>游戏账号注册</h1><br><br>
+        <h3>请输入个人信息</h3>
+        <input type="text" placeholder="昵称" id="nickname" required>
+        <input type="text" placeholder="账号" id="username" required>
+        <input type="password" placeholder="密码" id="password" required>
+        <input type="password" placeholder="再输入一次密码" id="password1" required>
+        <input type="text" placeholder="姓名" id="name" required>
+        <input type="text" placeholder="性别" id="sex" required>
+        <input type="text" placeholder="年龄" id="age" required>
+        <input type="text" placeholder="手机号" id="phone" required>
+        <input type="text" placeholder="身份证" id="idcard" required>
+        <input type="submit" value="提交"><br><br>
+    </form>
+        <form action="login.html">
+            <input type="submit" value="登录">
+        </form>
+    </div>
+</div>
+</body>
+</html>

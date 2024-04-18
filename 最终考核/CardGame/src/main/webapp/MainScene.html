@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>卡牌游戏主页面</title>
+    <style>
+        body {
+            background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #dcdcdc 10px, #dcdcdc 20px); /* 纹理背景 */
+        }
+    </style>
+
+    <style>
+        #playerInfo {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        #center {
+           text-align: center;
+           margin-top: 100px;
+        }
+
+    </style>
+</head>
+<body>
+    <button id="showInfoBtn">显示个人信息</button>
+    <div id="playerInfo">
+        <!-- 这里将显示用户信息 -->
+        <p id="showInfo"></p>
+    </div>
+    <div id="center">
+        <h1>游戏选项菜单</h1>
+        <button onclick="startGame()">开始游戏</button>
+        <button onclick="exitGame()">退出游戏</button><br><br>
+        <button onclick="chatGame()">聊天室</button>
+    </div>
+    <script>
+        function startGame() {
+             window.location.href = "card.html";
+        }
+
+        function exitGame() {
+             window.location.href = "login.html";
+        }
+
+        function chatGame() {
+            window.location.href = "chat.html";
+        }
+
+        document.getElementById('showInfoBtn').addEventListener('click', function() {
+            //// 用来判定是否登录成功
+            var UserInfo = JSON.parse(sessionStorage.getItem('UserInfo'));
+            //// 用来操作文本框里面的内容
+            var showinfo = document.getElementById('showInfo');
+            ////  用来改变展示style
+            var playerInfo = document.getElementById('playerInfo');
+
+            if (UserInfo) {
+                showinfo.innerHTML = `昵称: ${UserInfo.nickname} <br> 用户名: ${UserInfo.username} <br> 密码: ${UserInfo.password}`;
+                playerInfo.style.display = 'block';
+            } else {
+                showinfo.innerHTML = '用户信息不存在';
+                playerInfo.style.display = 'block';
+            }
+        });
+
+    </script>
+</body>
+</html>
