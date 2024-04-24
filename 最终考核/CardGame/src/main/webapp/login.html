@@ -65,7 +65,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:8080/CardGame/LoginRegister?method=login",
+                    url: "http://localhost:8080/LoginRegister?method=login",
                     data: { "Nickname":Nickname, "Username": Username, "Password": Password },
                     success: function(response) {
                         if (response.success) {

@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        body {
+            background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #dcdcdc 10px, #dcdcdc 20px); /* 纹理背景 */
+        }
+        #center {
+            text-align: center;
+            margin-top: 250px;
+        }
         .player1 {
             background-color:blueviolet;
             color:white;
@@ -37,11 +44,9 @@
     </div>
     <div class="health">玩家生命值: <span id="health2">30</span></div>
 </div>
-
 <script>
     let player1Health = 30;
     let player2Health = 30;
-
     function playCard(player, card) {
         // 在这里编写打出卡牌的逻辑
         // 可以根据player和card参数执行相应的操作，例如减少对方玩家的生命值

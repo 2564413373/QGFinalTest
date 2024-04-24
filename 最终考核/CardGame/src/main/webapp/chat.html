@@ -10,6 +10,10 @@
     #center {
       text-align: center;
       margin-top: 100px;
+        overflow-y: scroll; /* 设置垂直滚动条 */
+    }
+    .text {
+        text-align: left;
     }
   </style>
 </head>
@@ -20,17 +24,37 @@
    <input id="message" placeholder="输入信息"/><button id="sendBtn" onclick="sentMsg()">发送</button>
 </div>
 <script>
-  let ws = new WebSocket("ws://localhost:8080");
+  let ws = new WebSocket("ws://localhost:8080/chat");
   ws.onopen = function () {
     console.log("WebSocket连接已建立！！！")
   }
+  var count = 0;
   ws.onmessage = function (message) {
     //////   将服务端发送回的数据显示在聊天框中
-    document.getElementById("talkMsg").innerHTML += '<p>' + message.data + '</p>';
+      var UserInfo = JSON.parse(sessionStorage.getItem('UserInfo'));
+      if (UserInfo) {
+          const element = document.getElementById("talkMsg");
+          element.classList.add("text");
+          if (count === 0) {
+              element.innerHTML += '<b>' + message.data + '</b><br><br>';
+              count++;
+          } else {
+              //element.innerHTML += '<b>' +  `${UserInfo.nickname}:` + message.data + '</b><br><br>';
+              element.innerHTML += '<b>' + message.data + '</b><br><br>';
+          }
+      }
   }
   function sentMsg() {
+      var UserInfo = JSON.parse(sessionStorage.getItem('UserInfo'));
+      const Nickname = `${UserInfo.nickname}`;
+      const Message = document.getElementById("message").value;
+      var AllMessage = {
+          "用户" : Nickname,
+          "消息" : Message
+      }
     /////  发送文本框输入的信息到服务器
-    ws.send(document.getElementById("message").value);
+    //ws.send(document.getElementById("message").value);
+    ws.send(JSON.stringify(AllMessage));
 
     ////  发送完后清空文本框
     document.getElementById("message").value = "";
